@@ -16,11 +16,22 @@ class ProductController
         $this->url = $url;
     }
 
-    public function index()
+    public function index($title = false)
     {
+//        $sort = $_SESSION['sort'] ?? false;
+
         $query = $this->entityManager
             ->getRepository(Product::class)
             ->createQueryBuilder('product');
+
+//        if($title){
+//            $query->andWhere("product.$title = :title")
+//                ->setParameter('title', $title);
+//        }
+//
+//        if($sort){
+//            $query->orderBy('product'.$sort, 'DESC');
+//        }
 
         $result = $query->getQuery()
             ->getResult();
@@ -50,7 +61,9 @@ class ProductController
 
         $this->entityManager->persist($product);
         $this->entityManager->flush();
-        $this->index();
+
+        header('Location: index.php');
+
     }
 
     public function remove($id)
